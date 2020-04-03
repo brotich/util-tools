@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+#
+# Usage: github-actions-builds
+#   Open the Github Actions builds page for the current branch in default browser.
+
+def repo_slug_from_url(url)
+  url[%r{github.com[/:]([^/]*/(?:(?!\.git)[^/])*)\.*}, 1]
+end
+
+def repo_current_branch
+  `git rev-parse --abbrev-ref HEAD`
+end
+
+def repo_url
+  `git config --get remote.origin.url`
+end
+
+def open(repo, branch)
+  `open https://github.com/#{repo}/actions?query=branch:#{branch}`
+end
+
+slug = repo_slug_from_url(repo_url)
+
+open(slug, repo_current_branch)
